@@ -1,15 +1,22 @@
-<?php
-//session starten
-        session_start();
+     <form method="POST" action="?">
+         <input type="text" name="pizza" placeholder="Zutaten" />
+         <input type="submit" value="Absenden" />
+     </form>
 
-        $anzahl_aufrufe = 1;
-        if (isset($_SESSION['anzahl_aufrufe'])) {
-            $anzahl_aufrufe = $_SESSION['anzahl_aufrufe'];
+     <?php
+        session_start();
+        $zutaten = array();
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            array_push($zutaten,$_POST['pizza']);
+            echo "Die Pizza hat die Zutaten";
+            for($i = 0;$i< count($zutaten);$i++){
+                echo " {$zutaten[$i]}";
+            };
         }
-    
-    echo "Die Seite wurde {$anzahl_aufrufe}x aufgerufen.";
-    //Daten verarbeiten
-    $anzahl_aufrufe++;
-    //daten speichern
-    $_SESSION['anzahl_aufrufe'] = $anzahl_aufrufe;
-?>
+
+
+        if (isset($_SESSION['zutaten'])) {
+            $zutaten = $_SESSION['zutaten'];
+        }
+        $_SESSION['zutaten'] = $zutaten;
+        ?>

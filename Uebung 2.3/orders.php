@@ -12,8 +12,6 @@ try {
 } catch (PDOException $e) {
     echo "Connection failed: <br />" . $e->getMessage();
 }
-
-
 if ((isset($_GET['id'])) && (($_GET['id']) != "")) {
     $customerId = $_GET['id'];
     $sql = "SELECT * FROM orders WHERE customer_id = :ID";
@@ -24,6 +22,7 @@ if ((isset($_GET['id'])) && (($_GET['id']) != "")) {
 ?>
     <table border="1px solid">
         <tr>
+            <th>Order ID</th>
             <th>Order Date</th>
             <th>Shipped Date</th>
             <th>Delete Order</th>
@@ -32,9 +31,10 @@ if ((isset($_GET['id'])) && (($_GET['id']) != "")) {
         while ($row = $statement->fetch()) {
         ?>
             <tr>
+                <td><?= $row['id'] . "<br />" ?> </td>
                 <td><?= $row['order_date'] . "<br />" ?> </td>
                 <td><?= $row['shipped_date'] . "<br /><br />" ?> </td>
-                <td> <button onclick="DeleteOrder(<?= $row['id']?>)">Delete Order</button></td>
+                <td> <button onclick="DeleteOrder(<?= $row['id'] ?>,$conn)">Delete Order</button></td>
             </tr>
         <?php
         }
@@ -42,11 +42,15 @@ if ((isset($_GET['id'])) && (($_GET['id']) != "")) {
 
     </table>
 <?php
-function DeleteOrder(){
-    $sql = "SELECT * FROM customers WHERE job_title = 'Purchasing Representative'";
-    $result = $conn->query($sql);
-}
 } else {
     echo "Customer not Found";
+}
+function DeleteOrder($orderid, $connection)
+{
+    $sql = "DELETE FROM orders WHERE id = :orderid";
+    $statement = $connection->prepare($sql);
+    $statement->execute([
+        ':orderid' => $orderid
+    ]);
 }
 ?>

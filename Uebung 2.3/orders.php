@@ -34,7 +34,7 @@ if ((isset($_GET['id'])) && (($_GET['id']) != "")) {
                 <td><?= $row['id'] . "<br />" ?> </td>
                 <td><?= $row['order_date'] . "<br />" ?> </td>
                 <td><?= $row['shipped_date'] . "<br /><br />" ?> </td>
-                <td> <button onclick="DeleteOrder(<?= $row['id'] ?>,$conn)">Delete Order</button></td>
+                <td><a href='delete.php?id=<?php echo $row['id']?>'>Delete</a></td>
             </tr>
         <?php
         }
@@ -45,12 +45,5 @@ if ((isset($_GET['id'])) && (($_GET['id']) != "")) {
 } else {
     echo "Customer not Found";
 }
-function DeleteOrder($orderid, $connection)
-{
-    $sql = "DELETE FROM orders WHERE id = :orderid";
-    $statement = $connection->prepare($sql);
-    $statement->execute([
-        ':orderid' => $orderid
-    ]);
-}
+
 ?>
